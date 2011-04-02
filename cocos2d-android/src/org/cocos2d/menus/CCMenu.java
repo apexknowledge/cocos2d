@@ -112,6 +112,9 @@ public class CCMenu extends CCLayer {
     // Menu - Events
     @Override
     public boolean ccTouchesBegan(MotionEvent event) {
+        if (state != MenuState.kMenuStateWaiting)
+            this.ccTouchesCancelled(event);
+
         if (state != MenuState.kMenuStateWaiting || ! visible_)
             return CCTouchDispatcher.kEventIgnored;
 

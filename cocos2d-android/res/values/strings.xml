@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name"> Cocos2D </string>
-    <string name="activity_actionmanagertest"> Action Manager Test </string>
-    <string name="activity_actionstest"> Actions Test </string>
-    <string name="activity_atlastest"> Atlas Test </string>
-    <string name="activity_box2dtest"> Box2D Test </string>
-    <string name="activity_clickandmovetest"> Click And Move Test </string>
-    <string name="activity_cocosnodetest"> Cocos Node Test </string>
-    <string name="activity_drawprimitivestest"> Draw Primitives Test </string>
-    <string name="activity_easeactionstest"> Ease Actions Test </string>
-    <string name="activity_effectsadvancedtest"> Advanced Effects </string>
-    <string name="activity_effectstest"> Effects Test </string>
-    <string name="activity_jbox2dtest"> JBox2D Test </string>
-    <string name="activity_menutest"> Menu Test </string>
-    <string name="activity_motionstreaktest"> Motion Streak Test </string>
-    <string name="activity_particletest"> Particle Test </string>
-    <string name="activity_schedulertest"> Scheduler Test </string>
-    <string name="activity_tilemaptest"> Tile Map Test </string>
-        
-    <string name="activity_scenetest"> Scene Test </string>
-    <string name="activity_soundenginetest"> SoundEngine Test </string>
-    <string name="activity_spritestest"> Sprites Test </string>
-    <string name="activity_transitionstest"> Transitions Test </string>
-    <string name="activity_rotateworldtest"> Rotate World Test </string>
-    <string name="activity_parallaxtest"> Parallax Test </string>
-    
+
+    <string name="app_name" translatable="false">Cocos2D</string>
+    <string name="activity_actionmanagertest" translatable="false">Action Manager Test</string>
+    <string name="activity_actionstest" translatable="false">Actions Test</string>
+    <string name="activity_atlastest" translatable="false">Atlas Test</string>
+    <string name="activity_box2dtest" translatable="false">Box2D Test</string>
+    <string name="activity_clickandmovetest" translatable="false">Click And Move Test</string>
+    <string name="activity_cocosnodetest" translatable="false">Cocos Node Test</string>
+    <string name="activity_drawprimitivestest" translatable="false">Draw Primitives Test</string>
+    <string name="activity_easeactionstest" translatable="false">Ease Actions Test</string>
+    <string name="activity_effectsadvancedtest" translatable="false">Advanced Effects</string>
+    <string name="activity_effectstest" translatable="false">Effects Test</string>
+    <string name="activity_jbox2dtest" translatable="false">JBox2D Test</string>
+    <string name="activity_menutest" translatable="false">Menu Test</string>
+    <string name="activity_motionstreaktest" translatable="false">Motion Streak Test</string>
+    <string name="activity_particletest" translatable="false">Particle Test</string>
+    <string name="activity_schedulertest" translatable="false">Scheduler Test</string>
+    <string name="activity_tilemaptest" translatable="false">Tile Map Test</string>
+    <string name="activity_scenetest" translatable="false">Scene Test</string>
+    <string name="activity_soundenginetest" translatable="false">SoundEngine Test</string>
+    <string name="activity_spritestest" translatable="false">Sprites Test</string>
+    <string name="activity_transitionstest" translatable="false">Transitions Test</string>
+    <string name="activity_rotateworldtest" translatable="false">Rotate World Test</string>
+    <string name="activity_parallaxtest" translatable="false">Parallax Test</string>
+
 </resources>

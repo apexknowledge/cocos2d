@@ -12,13 +12,13 @@ import javax.microedition.khronos.opengles.GL10;
 
 /**
  * CCLabelAtlas is a subclass of CCAtlasNode.
- * 
+ *
  * It can be as a replacement of CCLabel since it is MUCH faster.
- * 
+ *
  * CCLabelAtlas versus CCLabel: - CCLabelAtlas is MUCH faster than CCLabel - CCLabelAtlas
  * "characters" have a fixed height and width - CCLabelAtlas "characters" can be anything you want
  * since they are taken from an image file
- * 
+ *
  * A more flexible class is CCBitmapFontAtlas. It supports variable width characters and it also has
  * a nice editor.
  */
@@ -45,11 +45,10 @@ public class CCLabelAtlas extends CCAtlasNode implements CCLabelProtocol, CCNode
     protected CCLabelAtlas(CharSequence theString, String charmapfile, int w, int h, char c) {
         super(charmapfile, w, h, theString.length());
 
-        string_ = new TextBuilder(theString.length());
-        string_.append(theString);
         mapStartChar = c;
 
-        updateAtlasValues();
+        string_ = new TextBuilder(theString.length());
+        setString(theString);
     }
 
     @Override

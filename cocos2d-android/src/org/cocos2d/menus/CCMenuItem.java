@@ -1,12 +1,12 @@
 package org.cocos2d.menus;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import org.cocos2d.nodes.CCNode;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGRect;
 import org.cocos2d.types.CGSize;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 
 /** CCMenuItem base class
@@ -49,14 +49,14 @@ public class CCMenuItem extends CCNode {
 
         invocation = null;
         if (rec != null && cb != null) {
-        	Class<?> cls = rec.getClass();
-        	try {
-        		invocation = cls.getMethod(cb, Object.class);
-        	} catch (SecurityException e) {
-        		e.printStackTrace();
-        	} catch (NoSuchMethodException e) {
-        		e.printStackTrace();
-        	}
+            Class<?> cls = rec.getClass();
+            try {
+                invocation = cls.getMethod(cb, Object.class);
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            }
         }
 
         isEnabled_ = true;
@@ -68,20 +68,20 @@ public class CCMenuItem extends CCNode {
      */
     public void activate() {
         if (isEnabled_) {
-        	if (targetCallback != null & invocation != null) {
-        		try {
-        			invocation.invoke(targetCallback, this);
-        		} catch (IllegalArgumentException e) {
-        			// TODO Auto-generated catch block
-        			e.printStackTrace();
-        		} catch (IllegalAccessException e) {
-        			// TODO Auto-generated catch block
-        			e.printStackTrace();
-        		} catch (InvocationTargetException e) {
-        			// TODO Auto-generated catch block
-        			e.printStackTrace();
-        		}
-        	}
+            if (targetCallback != null & invocation != null) {
+                try {
+                    invocation.invoke(targetCallback, this);
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    if(e.getTargetException() instanceof RuntimeException)
+                        throw (RuntimeException)e.getTargetException();
+                    else
+                        e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -117,9 +117,9 @@ public class CCMenuItem extends CCNode {
      * Returns the outside box
      */
     public CGRect rect() {
-    	CGPoint pos = getPositionRef();
-    	CGPoint pnt = getAnchorPointRef();
-    	CGSize size = getContentSizeRef();
+        CGPoint pos = getPositionRef();
+        CGPoint pnt = getAnchorPointRef();
+        CGSize size = getContentSizeRef();
         return CGRect.make(pos.x - size.width * pnt.x, pos.y -
                 size.height * pnt.y,
                 size.width, size.height);
@@ -130,13 +130,11 @@ public class CCMenuItem extends CCNode {
      * No garbage version.
      */
     public void rect(CGRect ret) {
-    	CGPoint pos = getPositionRef();
-    	CGPoint pnt = getAnchorPointRef();
-    	CGSize size = getContentSizeRef();
+        CGPoint pos = getPositionRef();
+        CGPoint pnt = getAnchorPointRef();
+        CGSize size = getContentSizeRef();
         ret.set(pos.x - size.width * pnt.x, pos.y -
                 size.height * pnt.y,
                 size.width, size.height);
     }
 }
-
-

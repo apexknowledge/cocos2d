@@ -29,22 +29,22 @@ import android.os.Build;
 import android.util.Log;
 import android.view.MotionEvent;
 
-/** CCNode is the main element. 
+/** CCNode is the main element.
  Anything thats gets drawn or contains things that get drawn is a CCNode.
  The most popular CCNodes are: CCScene, CCLayer, CCSprite, CCMenu.
- 
+
  The main features of a CCNode are:
  - They can contain other CCNode nodes (addChild, getChildByTag, removeChild, etc)
  - They can schedule periodic callback (schedule, unschedule, etc)
  - They can execute actions (runAction, stopAction, etc)
- 
+
  Some CCNode nodes provide extra functionality for them or their children.
- 
+
  Subclassing a CCNode usually means (one/all) of:
  - overriding init to initialize resources and schedule callbacks
  - create callbacks to handle the advancement of time
  - overriding draw to render the node
- 
+
  Features of CCNode:
  - position
  - scale (x, y)
@@ -56,23 +56,23 @@ import android.view.MotionEvent;
  - visible
  - z-order
  - openGL z position
- 
+
  Default values:
   - rotation: 0
   - position: (x=0,y=0)
   - scale: (x=1,y=1)
   - contentSize: (x=0,y=0)
   - anchorPoint: (x=0,y=0)
- 
+
  Limitations:
  - A CCNode is a "void" object. It doesn't have a texture
- 
+
  Order in transformations with grid disabled
  -# The node will be translated (position)
  -# The node will be rotated (rotation)
  -# The node will be scaled (scale)
  -# The node will be moved according to the camera values (camera)
- 
+
  Order in transformations with grid enabled
  -# The node will be translated (position)
  -# The node will be rotated (rotation)
@@ -80,10 +80,10 @@ import android.view.MotionEvent;
  -# The grid will capture the screen
  -# The node will be moved according to the camera values (camera)
  -# The grid will render the captured screen
- 
+
  Camera:
  - Each node has a camera. By default it points to the center of the CCNode.
-*/ 
+*/
 public class CCNode {
     private static final String LOG_TAG = CCNode.class.getSimpleName();
 
@@ -91,7 +91,7 @@ public class CCNode {
 
     public static final int kCCNodeTagInvalid = -1;
 
-	// rotation angle
+    // rotation angle
     protected float rotation_;
 
     /** The rotation (angle) of the node in degrees.
@@ -110,11 +110,11 @@ public class CCNode {
         }
     }
 
-	// scaling factors
+    // scaling factors
     protected float scaleX_;
     protected float scaleY_;
 
-    /** The scale factor of the node. 
+    /** The scale factor of the node.
        1.0 is the default scale factor. It only modifies the X scale factor.
     */
     public float getScaleX() {
@@ -129,7 +129,7 @@ public class CCNode {
         }
     }
 
-    /** The scale factor of the node. 
+    /** The scale factor of the node.
         1.0 is the default scale factor. It only modifies the Y scale factor.
     */
     public float getScaleY() {
@@ -141,7 +141,7 @@ public class CCNode {
         isTransformDirty_ = isInverseDirty_ = true;
         if (ccConfig.CC_NODE_TRANSFORM_USING_AFFINE_MATRIX) {
             isTransformGLDirty_ = true;
-        }	
+        }
     }
 
     /** The scale factor of the node.
@@ -164,8 +164,8 @@ public class CCNode {
         return 0;
     }
 
-	// anchor point in pixels
-	protected CGPoint anchorPointInPixels_;	
+    // anchor point in pixels
+    protected CGPoint anchorPointInPixels_;
 
     /** The anchorPoint in absolute pixels.
       Since v0.8 you can only read it. If you wish to modify it, use anchorPoint instead
@@ -173,10 +173,10 @@ public class CCNode {
     public CGPoint getAnchorPointInPixels() {
         return CGPoint.make(anchorPointInPixels_.x, anchorPointInPixels_.y);
     }
-    
-	// If YES the transformtions will be relative to (-transform.x, -transform.y).
-	// Sprites, Labels and any other "small" object uses it.
-	// Scenes, Layers and other "whole screen" object don't use it.
+
+    // If YES the transformtions will be relative to (-transform.x, -transform.y).
+    // Sprites, Labels and any other "small" object uses it.
+    // Scenes, Layers and other "whole screen" object don't use it.
     private boolean isRelativeAnchorPoint_;
 
     /** If YES the transformtions will be relative to it's anchor point.
@@ -195,10 +195,10 @@ public class CCNode {
         return isRelativeAnchorPoint_;
     }
 
-	// anchor point normalized
+    // anchor point normalized
     protected CGPoint anchorPoint_;
 
-	// untransformed size of the node
+    // untransformed size of the node
     protected CGSize contentSize_;
 
     /** The untransformed size of the node.
@@ -207,10 +207,10 @@ public class CCNode {
      @since v0.8
      */
     public void setContentSize(CGSize size) {
-    	setContentSize(size.width, size.height);
+        setContentSize(size.width, size.height);
     }
-	
-	public void setContentSize(float w, float h) {
+
+    public void setContentSize(float w, float h) {
         if ( !(contentSize_.width == w && contentSize_.height == h) ) {
             contentSize_.set(w, h);// = CGSize.make(size.width, size.height);
             anchorPointInPixels_.set(contentSize_.width * anchorPoint_.x,
@@ -222,11 +222,11 @@ public class CCNode {
 
         }
     }
-	
+
     public CGSize getContentSize() {
         return CGSize.make(contentSize_.width, contentSize_.height);
     }
-    
+
     public CGSize getContentSizeRef() {
         return contentSize_;
     }
@@ -240,14 +240,14 @@ public class CCNode {
       @since v0.8
     */
     public void setAnchorPoint(CGPoint pnt) {
-    	setAnchorPoint(pnt.x, pnt.y);
+        setAnchorPoint(pnt.x, pnt.y);
     }
-    
+
     public void setAnchorPoint(float x, float y) {
         if (!(x == anchorPoint_.x && y == anchorPoint_.y)) {
             anchorPoint_.set(x, y);// = CGPoint.make(pnt.x, pnt.y);
-            anchorPointInPixels_.set(contentSize_.width * anchorPoint_.x,// = CGPoint.ccp(contentSize_.width * anchorPoint_.x, 
-            						contentSize_.height * anchorPoint_.y);//   contentSize_.height * anchorPoint_.y);
+            anchorPointInPixels_.set(contentSize_.width * anchorPoint_.x,// = CGPoint.ccp(contentSize_.width * anchorPoint_.x,
+                                    contentSize_.height * anchorPoint_.y);//   contentSize_.height * anchorPoint_.y);
 
             isTransformDirty_ = isInverseDirty_ = true;
             if (ccConfig.CC_NODE_TRANSFORM_USING_AFFINE_MATRIX) {
@@ -255,27 +255,27 @@ public class CCNode {
             }
         }
     }
-   
+
     public CGPoint getAnchorPoint() {
         return CGPoint.make(anchorPoint_.x, anchorPoint_.y);
     }
-    
+
     public CGPoint getAnchorPointRef() {
         return anchorPoint_;
     }
-    
-    // #if	CC_NODE_TRANSFORM_USING_AFFINE_MATRIX
-	private float []	transformGL_; // [16];
-	
+
+    // #if    CC_NODE_TRANSFORM_USING_AFFINE_MATRIX
+    private float []    transformGL_; // [16];
+
     // #endif
     private CGAffineTransform transform_, inverse_;
 
-	// To reduce memory, place BOOLs that are not properties here:
+    // To reduce memory, place BOOLs that are not properties here:
     private boolean isTransformDirty_;
     private boolean isInverseDirty_;
 
-    //#if	CC_NODE_TRANSFORM_USING_AFFINE_MATRIX
-	private boolean isTransformGLDirty_;
+    //#if    CC_NODE_TRANSFORM_USING_AFFINE_MATRIX
+    private boolean isTransformGLDirty_;
     //#endif
 
     /** returns a "local" axis aligned bounding box of the node.
@@ -287,7 +287,7 @@ public class CCNode {
         return CGRect.applyAffineTransform(rect, nodeToParentTransform());
     }
 
-	// position of the node
+    // position of the node
     protected CGPoint position_;
 
     /** Position (x,y) of the node in OpenGL coordinates.
@@ -300,19 +300,19 @@ public class CCNode {
     public CGPoint getPositionRef() {
         return position_;
     }
-    
+
     public void setPosition(CGPoint pnt) {
-    	setPosition(pnt.x, pnt.y);
+        setPosition(pnt.x, pnt.y);
     }
-    
-	public void setPosition(float x, float y) {
+
+    public void setPosition(float x, float y) {
         position_.set(x, y);// = CGPoint.make(pnt.x, pnt.y);
         isTransformDirty_ = isInverseDirty_ = true;
         if (ccConfig.CC_NODE_TRANSFORM_USING_AFFINE_MATRIX) {
             isTransformGLDirty_ = true;
         }
-    }	
-	
+    }
+
     /** A CCCamera object that lets you move the node using a gluLookAt */
     private CCCamera camera_;
 
@@ -321,17 +321,17 @@ public class CCNode {
         if (camera_ == null)
             camera_ = new CCCamera();
 
-		// by default, center camera at the Sprite's anchor point
-		//		[camera_ setCenterX:anchorPointInPixels_.x centerY:anchorPointInPixels_.y centerZ:0];
-		//		[camera_ setEyeX:anchorPointInPixels_.x eyeY:anchorPointInPixels_.y eyeZ:1];
-		
-		//		[camera_ setCenterX:0 centerY:0 centerZ:0];
-		//		[camera_ setEyeX:0 eyeY:0 eyeZ:1];
-	
+        // by default, center camera at the Sprite's anchor point
+        //        [camera_ setCenterX:anchorPointInPixels_.x centerY:anchorPointInPixels_.y centerZ:0];
+        //        [camera_ setEyeX:anchorPointInPixels_.x eyeY:anchorPointInPixels_.y eyeZ:1];
+
+        //        [camera_ setCenterX:0 centerY:0 centerZ:0];
+        //        [camera_ setEyeX:0 eyeY:0 eyeZ:1];
+
         return camera_;
     }
 
-	// a Grid
+    // a Grid
     protected CCGridBase grid_;
 
     /** A CCGrid object that is used when applying effects */
@@ -343,7 +343,7 @@ public class CCNode {
         this.grid_ = grid;
     }
 
-	// is visible
+    // is visible
     protected boolean visible_;
 
     /** Whether of not the node is visible. Default is YES */
@@ -355,7 +355,7 @@ public class CCNode {
         this.visible_ = visible;
     }
 
-	// weakref to parent
+    // weakref to parent
     protected CCNode parent_;
 
     /** A weak reference to the parent */
@@ -367,7 +367,7 @@ public class CCNode {
         parent_ = parent;
     }
 
-	// a tag. any number you want to assign to the node
+    // a tag. any number you want to assign to the node
     private int tag_;
 
     /** A tag used to identify the node easily */
@@ -379,7 +379,7 @@ public class CCNode {
         tag_ = tag;
     }
 
-	// openGL real Z vertex
+    // openGL real Z vertex
     protected float vertexZ_;
 
     /** The real openGL Z vertex.
@@ -399,7 +399,7 @@ public class CCNode {
     }
 
 
-	// z-order value
+    // z-order value
     private int zOrder_;
 
     /** The z order of the node relative to it's "brothers": children of the same parent */
@@ -412,7 +412,7 @@ public class CCNode {
         zOrder_ = z;
     }
 
-	// array of children
+    // array of children
     protected List<CCNode> children_;
 
     public List<CCNode> getChildren() {
@@ -431,7 +431,7 @@ public class CCNode {
         userData = data;
     }
 
-	// Is running
+    // Is running
     private boolean isRunning_;
 
     /** whether or not the node is running */
@@ -449,8 +449,8 @@ public class CCNode {
 
     /** initializes the node */
     protected CCNode() {
-    	transformGL_ = new float[16];
-    	
+        transformGL_ = new float[16];
+
         isRunning_ = false;
 
         rotation_ = 0.0f;
@@ -460,33 +460,33 @@ public class CCNode {
 
         transform_ = CGAffineTransform.identity();
         inverse_ = CGAffineTransform.identity();
-        
-        // "whole screen" objects. like Scenes and Layers, should set relativeAnchorPoint to false        
+
+        // "whole screen" objects. like Scenes and Layers, should set relativeAnchorPoint to false
         isRelativeAnchorPoint_ = true;
 
-		anchorPointInPixels_ = CGPoint.ccp(0,0);
+        anchorPointInPixels_ = CGPoint.ccp(0,0);
         anchorPoint_ = CGPoint.ccp(0,0);
         contentSize_ = CGSize.zero();
 
         isTransformDirty_ = isInverseDirty_ = true;
-	
+
         if (ccConfig.CC_NODE_TRANSFORM_USING_AFFINE_MATRIX) {
-		    isTransformGLDirty_ = true;
-        }	
-		
-		zOrder_ = 0;
+            isTransformGLDirty_ = true;
+        }
+
+        zOrder_ = 0;
         vertexZ_ = 0;
         grid_ = null;
         visible_ = true;
-		tag_ = kCCNodeTagInvalid;
+        tag_ = kCCNodeTagInvalid;
 
-		// lazy alloc
+        // lazy alloc
         camera_ = null;
-        
-		// children (lazy allocs)
+
+        // children (lazy allocs)
         children_ = null;
 
-		// userData is always inited as nil
+        // userData is always inited as nil
         userData = null;
     }
 
@@ -500,8 +500,8 @@ public class CCNode {
      * to override this method
      */
     public CCNode addChild(CCNode child, int z, int tag) {
-	    assert child != null : "Argument must be non-nil";
-	    assert child.parent_ == null: "child already added. It can't be added again";
+        assert child != null : "Argument must be non-nil";
+        assert child.parent_ == null: "child already added. It can't be added again";
 
         if (children_ == null)
             childrenAlloc();
@@ -545,12 +545,16 @@ public class CCNode {
             this.parent_.removeChild(this, cleanup);
         }
     }
-    
+
+    public void removeFromParentAndCleanup() {
+        removeFromParentAndCleanup(true);
+    }
+
     /**
      * Remove myself from the parent, for action CCCallFunc
      */
     public void removeSelf() {
-    	this.removeFromParentAndCleanup(true);
+        this.removeFromParentAndCleanup(true);
     }
 
     /** Removes a child from the container.
@@ -575,7 +579,7 @@ public class CCNode {
       @since v0.7.1
     */
     public void removeChildByTag(int tag, boolean cleanup) {
-	    assert tag != kCCNodeTagInvalid: "Invalid tag";
+        assert tag != kCCNodeTagInvalid: "Invalid tag";
 
         CCNode child = getChildByTag(tag);
         if (child == null)
@@ -589,21 +593,21 @@ public class CCNode {
       @since v0.7.1
     */
     public void removeAllChildren(boolean cleanup) {
-	    // not using detachChild improves speed here
-    	if (children_ == null)
-    		return;
-    	
-    	for (int i=0; i<children_.size(); ++i) {
-    		CCNode child = children_.get(i);
-    		if (isRunning_)
-    			child.onExit();
+        // not using detachChild improves speed here
+        if (children_ == null)
+            return;
 
-    		if (cleanup)
-    			child.cleanup();
+        for (int i=0; i<children_.size(); ++i) {
+            CCNode child = children_.get(i);
+            if (isRunning_)
+                child.onExit();
 
-    		child.setParent(null);
-    	}
-    	children_.clear();
+            if (cleanup)
+                child.cleanup();
+
+            child.setParent(null);
+        }
+        children_.clear();
 
     }
 
@@ -616,7 +620,7 @@ public class CCNode {
 
         if (children_ != null)
             for (int i=0; i<children_.size(); ++i) {
-            	CCNode node = children_.get(i);
+                CCNode node = children_.get(i);
                 if (node.tag_ == tag) {
                     return node;
                 }
@@ -637,7 +641,7 @@ public class CCNode {
         if (doCleanup)
             child.cleanup();
 
-	    // set parent nil at the end (issue #476)
+        // set parent nil at the end (issue #476)
         child.setParent(null);
 
         children_.remove(child);
@@ -673,7 +677,7 @@ public class CCNode {
       recursive method that visit its children and draw them
     */
     public void visit(GL10 gl) {
-	    // quick return if not visible
+        // quick return if not visible
         if (!visible_)
             return;
 
@@ -687,24 +691,24 @@ public class CCNode {
         transform(gl);
 
         if (children_ != null) {
-        	for (int i=0; i<children_.size(); ++i) {
-        		CCNode child = children_.get(i);
-        		if (child.zOrder_ < 0) {
-        			child.visit(gl);
-        		} else
-        			break;
-        	}
+            for (int i=0; i<children_.size(); ++i) {
+                CCNode child = children_.get(i);
+                if (child.zOrder_ < 0) {
+                    child.visit(gl);
+                } else
+                    break;
+            }
         }
 
         draw(gl);
 
         if (children_ != null) {
-        	for (int i=0; i<children_.size(); ++i) {
-        		CCNode child = children_.get(i);
-        		if (child.zOrder_ >= 0) {
-        			child.visit(gl);
-        		}
-        	}
+            for (int i=0; i<children_.size(); ++i) {
+                CCNode child = children_.get(i);
+                if (child.zOrder_ >= 0) {
+                    child.visit(gl);
+                }
+            }
         }
 
 
@@ -718,7 +722,7 @@ public class CCNode {
     /**
      * performs OpenGL view-matrix transformation based on position, scale, rotation and other attributes.
     */
-    public void transform(GL10 gl) {	
+    public void transform(GL10 gl) {
         // transformations
 
         if ( ccConfig.CC_NODE_TRANSFORM_USING_AFFINE_MATRIX ) {
@@ -732,7 +736,7 @@ public class CCNode {
 
             // gl.glMultMatrixf(transformGL_, transformGL_.length);
             gl.glMultMatrixf(transformGL_, 0);
-            
+
             if( vertexZ_ != 0)
                 gl.glTranslatef(0, 0, vertexZ_);
 
@@ -754,7 +758,7 @@ public class CCNode {
 
         } else {
             // BEGIN original implementation
-            // 
+            //
             // translate
             if ( isRelativeAnchorPoint_ && (anchorPointInPixels_.x != 0 || anchorPointInPixels_.y != 0 ) )
                 gl.glTranslatef( RENDER_IN_SUBPIXEL(-anchorPointInPixels_.x), RENDER_IN_SUBPIXEL(-anchorPointInPixels_.y), 0);
@@ -823,7 +827,7 @@ public class CCNode {
     /** Removes an action from the running action list given its tag
       @since v0.7.1
     */
-    public void stopAction(int tag) {    	
+    public void stopAction(int tag) {
         assert tag != CCAction.kCCActionTagInvalid : "Invalid tag_";
         CCActionManager.sharedManager().removeAction(tag, this);
     }
@@ -839,7 +843,7 @@ public class CCNode {
     }
 
     /** Returns the numbers of actions that are running plus the ones that are schedule to run
-               (actions in actionsToAdd and actions arrays). 
+               (actions in actionsToAdd and actions arrays).
      * Composable actions are counted as 1 action. Example:
      *    If you are running 1 Sequence of 7 actions, it will return 1.
      *    If you are running 7 Sequences of 2 actions, it will return 7.
@@ -892,16 +896,16 @@ public class CCNode {
     public void schedule(String selector, float interval) {
         assert selector != null : "Argument selector must be non-null";
         assert interval >= 0 : "Argument interval must be positive";
-        
+
         CCScheduler.sharedScheduler().schedule(selector, this, interval, !isRunning_);
     }
-    
+
     /*
      * schedules a selector.
      * The scheduled callback will be ticked every frame.
-     * 
+     *
      * This is java way version, uses interface based callbacks. UpdateCallback in this case.
-     * It would be preffered solution. It is more polite to Java, GC, and obfuscation.  
+     * It would be preffered solution. It is more polite to Java, GC, and obfuscation.
      */
     public void schedule(UpdateCallback callback) {
         schedule(callback, 0);
@@ -911,17 +915,17 @@ public class CCNode {
      * schedules a custom callback with an interval time in seconds.
      * If time is 0 it will be ticked every frame.
      * If time is 0, it is recommended to use 'scheduleUpdate' instead.
-     * 
+     *
      * This is java way version, uses interface based callbacks. UpdateCallback in this case.
-     * It would be preffered solution. It is more polite to Java, GC, and obfuscation.  
+     * It would be preffered solution. It is more polite to Java, GC, and obfuscation.
      */
     public void schedule(UpdateCallback callback, float interval) {
         assert callback != null : "Argument callback must be non-null";
         assert interval >= 0 : "Argument interval must be positive";
-        
+
         CCScheduler.sharedScheduler().schedule(callback, this, interval, !isRunning_);
     }
-    
+
     /* unschedules a custom selector.*/
     public void unschedule(String selector) {
         // explicit null handling
@@ -930,10 +934,10 @@ public class CCNode {
 
         CCScheduler.sharedScheduler().unschedule(selector, this);
     }
-    
+
     /*
      * unschedules a custom callback.
-     * 
+     *
      * This is java way version, uses interface based callbacks. UpdateCallback in this case.
      * It would be preffered solution. It is more polite to Java, GC, and obfuscation.
      */
@@ -957,16 +961,16 @@ public class CCNode {
       Called internally by onEnter
       */
     public void resumeSchedulerAndActions() {
-	    CCScheduler.sharedScheduler().resume(this);
-	    CCActionManager.sharedManager().resume(this);
+        CCScheduler.sharedScheduler().resume(this);
+        CCActionManager.sharedManager().resume(this);
     }
 
     /** pauses all scheduled selectors and actions.
       Called internally by onExit
       */
     public void pauseSchedulerAndActions() {
-    	CCScheduler.sharedScheduler().pause(this);
-    	CCActionManager.sharedManager().pause(this);
+        CCScheduler.sharedScheduler().pause(this);
+        CCActionManager.sharedManager().pause(this);
     }
 
     // CocosNode Transform
@@ -975,31 +979,31 @@ public class CCNode {
     */
     private CGAffineTransform nodeToParentTransform() {
         if (isTransformDirty_) {
-        	CGPoint zero = CGPoint.getZero();
+            CGPoint zero = CGPoint.getZero();
             transform_.setToIdentity();
 
             if (!isRelativeAnchorPoint_ && !CGPoint.equalToPoint(anchorPointInPixels_, zero)) {
-            	transform_.translate(anchorPointInPixels_.x, anchorPointInPixels_.y);
+                transform_.translate(anchorPointInPixels_.x, anchorPointInPixels_.y);
             }
 
             if (!CGPoint.equalToPoint(position_, zero))
-            	transform_.translate(position_.x, position_.y);
-            
+                transform_.translate(position_.x, position_.y);
+
             if (rotation_ != 0)
-            	transform_.rotate(-ccMacros.CC_DEGREES_TO_RADIANS(rotation_));
-            
-            if( ! (scaleX_ == 1 && scaleY_ == 1) ) 
-            	transform_.scale(scaleX_, scaleY_);
-           
+                transform_.rotate(-ccMacros.CC_DEGREES_TO_RADIANS(rotation_));
+
+            if( ! (scaleX_ == 1 && scaleY_ == 1) )
+                transform_.scale(scaleX_, scaleY_);
+
             if (!CGPoint.equalToPoint(anchorPointInPixels_, zero))
-            	transform_.translate(-anchorPointInPixels_.x, -anchorPointInPixels_.y);
+                transform_.translate(-anchorPointInPixels_.x, -anchorPointInPixels_.y);
 
             isTransformDirty_ = false;
         }
 
         return transform_;
     }
- 
+
     /** Returns the inverse local affine transform matrix
       @since v0.7.1
     */
@@ -1026,27 +1030,27 @@ public class CCNode {
 
         return t;
     }
-    
+
     private void nodeToWorldTransform(CGAffineTransform ret) {
         ret.setTransform(nodeToParentTransform());
 
         for (CCNode p = parent_; p != null; p = p.parent_) {
-        	CGAffineTransformUtil.preConcate(ret, p.nodeToParentTransform());
+            CGAffineTransformUtil.preConcate(ret, p.nodeToParentTransform());
         }
     }
-    
+
     /** Returns the inverse world affine transform matrix
       @since v0.7.1
     */
     private CGAffineTransform worldToNodeTransform() {
         return nodeToWorldTransform().getTransformInvert();
     }
-    
+
     /**
      * This is analog method, result is written to ret. No garbage.
      */
     private void worldToNodeTransform(CGAffineTransform ret) {
-    	nodeToWorldTransform(ret);
+        nodeToWorldTransform(ret);
         CGAffineTransformUtil.inverse(ret);
     }
 
@@ -1055,42 +1059,42 @@ public class CCNode {
     */
     public CGPoint convertToNodeSpace(float x, float y) {
         OneClassPool<CGAffineTransform> pool = PoolHolder.getInstance().getCGAffineTransformPool();
-        
+
         CGAffineTransform temp = pool.get();
         worldToNodeTransform(temp);
-        
+
         CGPoint ret = new CGPoint();
-    	CGPointUtil.applyAffineTransform(x, y, temp, ret);
-    	
+        CGPointUtil.applyAffineTransform(x, y, temp, ret);
+
         pool.free(temp);
         return ret;
     }
-    
+
     /** converts a world coordinate to local coordinate
       @since v0.7.1
     */
     public CGPoint convertToNodeSpace(CGPoint p) {
-    	return convertToNodeSpace(p.x, p.y);
+        return convertToNodeSpace(p.x, p.y);
     }
-    
+
     /**
      * This is analog method, result is written to ret. No garbage.
      */
     public void convertToNodeSpace(CGPoint p, CGPoint ret) {
-    	convertToNodeSpace(p.x, p.y, ret);
+        convertToNodeSpace(p.x, p.y, ret);
     }
-    
+
     /**
      * This is analog method, result is written to ret. No garbage.
      */
     public void convertToNodeSpace(float x, float y, CGPoint ret) {
         OneClassPool<CGAffineTransform> pool = PoolHolder.getInstance().getCGAffineTransformPool();
-        
+
         CGAffineTransform temp = pool.get();
         worldToNodeTransform(temp);
-        
+
         CGPointUtil.applyAffineTransform(x, y, temp, ret);
-        
+
         pool.free(temp);
     }
 
@@ -1101,21 +1105,21 @@ public class CCNode {
         CGPoint nodePoint = CGPoint.make(x, y);
         return CGPoint.applyAffineTransform(nodePoint, nodeToWorldTransform());
     }
-    
+
     /**
      * This is analog method, result is written to ret. No garbage.
      */
     public void convertToWorldSpace(float x, float y , CGPoint ret) {
         OneClassPool<CGAffineTransform> pool = PoolHolder.getInstance().getCGAffineTransformPool();
-        
+
         CGAffineTransform temp = pool.get();
         nodeToWorldTransform(temp);
-        
+
         CGPointUtil.applyAffineTransform(x, y, temp, ret);
-        
+
         pool.free(temp);
     }
-    
+
     /** converts a world coordinate to local coordinate
       treating the returned/received node point as anchor relative
       @since v0.7.1
@@ -1140,35 +1144,35 @@ public class CCNode {
       @since v0.7.1
     */
     public CGPoint convertTouchToNodeSpace(MotionEvent event) {
-    	OneClassPool<CGPoint> pool = PoolHolder.getInstance().getCGPointPool();
-    	CGPoint point = pool.get();
-    	
-    	int action = event.getAction();
-		int pid = action >> MotionEvent.ACTION_POINTER_ID_SHIFT;
+        OneClassPool<CGPoint> pool = PoolHolder.getInstance().getCGPointPool();
+        CGPoint point = pool.get();
+
+        int action = event.getAction();
+        int pid = action >> MotionEvent.ACTION_POINTER_ID_SHIFT;
         if(Build.VERSION.SDK_INT >= 5) {
-        	CCDirector.sharedDirector().convertToGL(Util5.getX(event, pid), Util5.getY(event, pid), point);
+            CCDirector.sharedDirector().convertToGL(Util5.getX(event, pid), Util5.getY(event, pid), point);
         } else {
-        	CCDirector.sharedDirector().convertToGL(event.getX(), event.getY(), point);
+            CCDirector.sharedDirector().convertToGL(event.getX(), event.getY(), point);
         }
-    	
-    	float x = point.x, y = point.y;
-    	pool.free(point);
-    	
+
+        float x = point.x, y = point.y;
+        pool.free(point);
+
         return convertToNodeSpace(x, y);
     }
-    
+
     /**
      * This is analog method, result is written to ret. No garbage.
      */
     public void convertTouchToNodeSpace(MotionEvent event, CGPoint ret) {
-    	int action = event.getAction();
-		int pid = action >> MotionEvent.ACTION_POINTER_ID_SHIFT;
+        int action = event.getAction();
+        int pid = action >> MotionEvent.ACTION_POINTER_ID_SHIFT;
         if(Build.VERSION.SDK_INT >= 5) {
-        	CCDirector.sharedDirector().convertToGL(Util5.getX(event, pid), Util5.getY(event, pid), ret);
+            CCDirector.sharedDirector().convertToGL(Util5.getX(event, pid), Util5.getY(event, pid), ret);
         } else {
-        	CCDirector.sharedDirector().convertToGL(event.getX(), event.getY(), ret);
+            CCDirector.sharedDirector().convertToGL(event.getX(), event.getY(), ret);
         }
-    	
+
         convertToNodeSpace(ret.x, ret.y, ret);
     }
 
@@ -1176,20 +1180,20 @@ public class CCNode {
       @since v0.7.1
     */
     public CGPoint convertTouchToNodeSpaceAR(MotionEvent event) {
-    	OneClassPool<CGPoint> pool = PoolHolder.getInstance().getCGPointPool();
-    	CGPoint point = pool.get();
-    	
-    	int action = event.getAction();
-		int pid = action >> MotionEvent.ACTION_POINTER_ID_SHIFT;
+        OneClassPool<CGPoint> pool = PoolHolder.getInstance().getCGPointPool();
+        CGPoint point = pool.get();
+
+        int action = event.getAction();
+        int pid = action >> MotionEvent.ACTION_POINTER_ID_SHIFT;
         if(Build.VERSION.SDK_INT >= 5) {
-        	CCDirector.sharedDirector().convertToGL(Util5.getX(event, pid), Util5.getY(event, pid), point);
+            CCDirector.sharedDirector().convertToGL(Util5.getX(event, pid), Util5.getY(event, pid), point);
         } else {
-        	CCDirector.sharedDirector().convertToGL(event.getX(), event.getY(), point);
+            CCDirector.sharedDirector().convertToGL(event.getX(), event.getY(), point);
         }
-    	
-    	float x = point.x, y = point.y;
-    	pool.free(point);
-    	
+
+        float x = point.x, y = point.y;
+        pool.free(point);
+
         return convertToNodeSpaceAR(x, y);
     }
 
@@ -1211,33 +1215,33 @@ public class CCNode {
 
     private static Comparator<CCNode> zOrderComparator = new Comparator<CCNode>() {
 
-		@Override
-		public int compare(CCNode o1, CCNode o2) {
-			return o1.zOrder_ - o2.zOrder_;
-		}
-	};
-	
+        @Override
+        public int compare(CCNode o1, CCNode o2) {
+            return o1.zOrder_ - o2.zOrder_;
+        }
+    };
+
     // helper that reorder a child
     private void insertChild(CCNode node, int z) {
-    	node._setZOrder(z);
-    	int ind = Collections.binarySearch(children_, node, zOrderComparator);
-    	// let's find new index
-		if(ind >= 0) { // go to last if index is found
-			int size = children_.size();
-			CCNode prev;
-			
-			do {
-				prev = children_.get(ind);
-				ind++;
-			} while(ind < size && children_.get(ind).zOrder_ == prev.zOrder_);
-		} else { // index not found
-			ind = -(ind + 1);
-		}
-		children_.add(ind, node);
+        node._setZOrder(z);
+        int ind = Collections.binarySearch(children_, node, zOrderComparator);
+        // let's find new index
+        if(ind >= 0) { // go to last if index is found
+            int size = children_.size();
+            CCNode prev;
+
+            do {
+                prev = children_.get(ind);
+                ind++;
+            } while(ind < size && children_.get(ind).zOrder_ == prev.zOrder_);
+        } else { // index not found
+            ind = -(ind + 1);
+        }
+        children_.add(ind, node);
 //        int index = 0;
 //        boolean added = false;
 //        for (int i=0; i<children_.size(); ++i) {
-//        	CCNode child = children_.get(i);
+//            CCNode child = children_.get(i);
 //            if (child.getZOrder() > z) {
 //                added = true;
 //                children_.add(index, node);
@@ -1255,14 +1259,14 @@ public class CCNode {
     */
     public void cleanup() {
 
-	    // actions
+        // actions
         stopAllActions();
         unscheduleAllSelectors();
-	
-    	// timers
+
+        // timers
         if (children_ != null)
             for (int i=0; i<children_.size(); ++i) {
-            	CCNode node = children_.get(i);
+                CCNode node = children_.get(i);
                 node.cleanup();
             }
     }
